@@ -1,0 +1,1 @@
+export const strongCyan = '#00BCD4'
