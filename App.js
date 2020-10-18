@@ -8,6 +8,9 @@ import { strongCyan } from './utils/colors'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { createStackNavigator } from '@react-navigation/stack'
 import Deckview from './components/DeckView'
+import Quiz from './components/Quiz'
+import NewDeck from './components/NewDeck'
+import AddCard from './components/AddCard'
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -34,7 +37,7 @@ function MyTabs() {
       }} />
       <Tab.Screen 
         name="New Decks" 
-        component={SettingsScreen} 
+        component={NewDeck} 
         options={{
           tabBarIcon: ({ color }) => <MaterialCommunityIcons name='plus-box-outline' size={50} color={color} />
         }}  
@@ -60,8 +63,50 @@ export default class App extends React.Component {
         <NavigationContainer>
           <StatusBar backgroundColor={strongCyan} barStyle='light-content' />  
           <Stack.Navigator>
-            <Stack.Screen name="Home" component={MyTabs} />
-            <Stack.Screen name="DeckView" component={Deckview} />
+            <Stack.Screen 
+                name="Home" 
+                component={MyTabs} 
+                options={{
+                  headerStyle:{
+                    backgroundColor: strongCyan
+                  },
+                  headerTintColor: '#fff',
+                  headerTitleAlign: "center",
+                  }}
+            />
+            <Stack.Screen 
+                name="DeckView" 
+                component={Deckview} 
+                options={{
+                  headerStyle:{
+                    backgroundColor: strongCyan
+                  },
+                  headerTintColor: '#fff',
+                  headerTitleAlign: "center",
+                  }}
+            />
+            <Stack.Screen 
+                name="Quiz" 
+                component={Quiz} 
+                options={{
+                  headerStyle:{
+                    backgroundColor: strongCyan
+                  },
+                  headerTintColor: '#fff',
+                  headerTitleAlign: "center",
+                  }}
+            />
+            <Stack.Screen 
+                name="AddCard" 
+                component={AddCard} 
+                options={{
+                  headerStyle:{
+                    backgroundColor: strongCyan
+                  },
+                  headerTintColor: '#fff',
+                  headerTitleAlign: "center",
+                  }}
+            />
           </Stack.Navigator> 
         </NavigationContainer>
       </SafeAreaProvider>

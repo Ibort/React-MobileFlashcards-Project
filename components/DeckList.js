@@ -1,18 +1,22 @@
 import React from 'react'
 import { Text, View, StyleSheet, ScrollView, TouchableOpacity} from 'react-native'
-import { StatusBar } from 'expo-status-bar'
 import { strongCyan } from '../utils/colors'
 
 
-const title=['Lecso','Kolbász','Muzli','Lácso','Kőlbász','Mpzli', 'kenocs']
+const data=['Lecso','Kolbász','Muzli','Lácso','Kőlbász','Mpzli', 'kenocs']
+
+function deckNavigate(props, title) {
+    props.navigation.navigate(
+        'DeckView',{
+            title,
+        })
+}
 
 function Deck({title, props}) {
     return (
-       <TouchableOpacity onPress={() => props.navigation.navigate(
-           'DeckView'
-       )}>
+       <TouchableOpacity onPress={() => deckNavigate(props,title)}>
             <View style={styles.container}>
-                <Text style={styles.title}>{title}</Text>
+                <Text style={styles.title}>{title} Deck</Text>
                 <Text style={styles.subText}>X Cards</Text>
             </View>
       </TouchableOpacity> 
@@ -23,7 +27,7 @@ export default class DeckList extends React.Component {
     render() {
         return (
                 <ScrollView>
-                        {title.map((deck) => {
+                        {data.map((deck) => {
                             return <Deck key={deck} title={deck} props={this.props} />
                         })}
                 </ScrollView>
@@ -38,7 +42,6 @@ const styles = StyleSheet.create({
       backgroundColor: '#fff',
       alignItems: 'center',
       justifyContent: 'center',
-      paddingTop: StatusBar.currentHeight,
       borderBottomColor: strongCyan,
       borderBottomWidth: 2,
     },
