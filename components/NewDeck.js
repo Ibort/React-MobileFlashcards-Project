@@ -8,22 +8,21 @@ class NewDeck extends React.Component {
     state = {
         value: ''
     }
-    handleChange = (e) => {
+    handleChange = (text) => {
         this.setState({
-            value:e.target.value
+            value:text
         })
         
     }
 
     handleSubmit = () => {
-        const {value } = this.state
+        const {value} = this.state
         const deck = {[value]: {
                         title: value,
                         questions: []
-                    }}
-                    
+                    }}          
         saveDeck(deck, value)
-        this.props.dispatch(addDeck(deck,value))
+        .then(() => this.props.dispatch(addDeck(deck,value)))
         
         this.setState({
             value: ''
@@ -32,16 +31,21 @@ class NewDeck extends React.Component {
     }
 
     render() {
+        const btnDisabled = this.state.value === '' ? true : false
+
         return(
             <View style={styles.container}>
                 <Text style={styles.title}>What is the Title of your new deck?</Text>
                 <TextInput 
                     style={styles.inputField} 
-                    multiline={true}
                     value={this.state.value}
-                    onChange={(e) => this.handleChange(e)}
+                    onChangeText={(text) => this.handleChange(text)}
                 />
-                <TouchableOpacity style={styles.subBtn} onPress={this.handleSubmit}>
+                <TouchableOpacity 
+                    style={!btnDisabled ? styles.subBtn : styles.subBtnDis} 
+                    onPress={this.handleSubmit}
+                    disabled={btnDisabled}
+                >
                     <Text style={styles.subBtnTxt}>Submit</Text>
                 </TouchableOpacity>
             </View>
@@ -75,6 +79,13 @@ const styles = StyleSheet.create({
     },
     subBtn: {
         backgroundColor: 'black',
+        borderRadius: 20,   
+        padding: 20, 
+        width:200,    
+    },
+    subBtnDis: {
+        opacity: 0.5,
+        backgroundColor: 'gray',
         borderRadius: 20,   
         padding: 20, 
         width:200,    

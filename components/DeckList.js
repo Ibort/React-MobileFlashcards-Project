@@ -15,12 +15,12 @@ function deckNavigate(props, title) {
         })
 }
 
-function Deck({title, props}) {
+function Deck({title, props, cardNum}) {
     return (
        <TouchableOpacity onPress={() => deckNavigate(props,title)}>
             <View style={styles.container}>
                 <Text style={styles.title}>{title} Deck</Text>
-                <Text style={styles.subText}>X Cards</Text>
+                <Text style={styles.subText}>{cardNum} Cards</Text>
             </View>
       </TouchableOpacity> 
     );
@@ -30,18 +30,20 @@ class DeckList extends React.Component {
     componentDidMount(){   
         const { dispatch, navigation } = this.props
 
-        navigation.addListener('focus', () => {            
+        navigation.addListener('focus', () => {          
             getDecks()
-            .then(res => dispatch(receiveDecks(res)))
+            .then(res => {dispatch(receiveDecks(res))})
           });
     }
     
     render() {
         const { decks } = this.props
+        
         return (
                 <ScrollView>
                         {Object.keys(decks).map((deck) => {
-                            return <Deck key={deck} title={deck} props={this.props} />
+                            const qNum = decks[deck].questions ? decks[deck].questions.length : 0
+                            return <Deck key={deck} title={deck} props={this.props} cardNum={qNum}/>
                         })}
                 </ScrollView>
         )

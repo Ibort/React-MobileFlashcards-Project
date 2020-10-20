@@ -19,8 +19,11 @@ class DeckView extends React.Component {
         })
     }
 
-    startQuiz = () => {
-        this.props.navigation.navigate('Quiz')  
+    startQuiz = (title) => {
+        const deck = this.props.decks[title]
+        this.props.navigation.navigate('Quiz', {
+            deck
+        })  
     }
 
     addCard = () => {
@@ -31,14 +34,15 @@ class DeckView extends React.Component {
     delDeck = () => {
         const { title } = this.props.route.params
         removeDeck(title)
-        .then(() => {
-            this.props.navigation.goBack()
-        })
+        .then(() => this.props.navigation.goBack())
     }
 
     render() {
+        console.log(this.props);
+
         const { title } = this.props.route.params
-        const cardNum = this.props.decks[title].questions.length
+        const cardNum = !this.props.decks[title] ? 0 : this.props.decks[title].questions.length
+        const btnDisabled = cardNum === 0 ? true : false
 
         return (
                 <View style={styles.container}>
@@ -47,13 +51,23 @@ class DeckView extends React.Component {
                         <Text style={styles.subText}>{cardNum} Cards</Text>
                     </View>
                     <View>
-                        <TouchableOpacity style={styles.addBtn} onPress={() => this.addCard()}>
+                        <TouchableOpacity 
+                            style={styles.addBtn} 
+                            onPress={() => this.addCard()}
+                        >
                             <Text>Add Card</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.quizBtn} onPress={() => this.startQuiz()}>
+                        <TouchableOpacity 
+                            style={!btnDisabled ? styles.quizBtn : styles.quiztnDis} 
+                            onPress={() => this.startQuiz(title)}
+                            disabled={btnDisabled}
+                        >
                             <Text style={{color: 'white'}}>Start Quiz</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.delBtn} onPress={() => this.delDeck()}>
+                        <TouchableOpacity 
+                            style={styles.delBtn} 
+                            onPress={() => this.delDeck()}
+                        >
                             <Text style={{color: 'darkred'}}>Delete Deck</Text>
                         </TouchableOpacity>
                     </View>
@@ -106,5 +120,14 @@ class DeckView extends React.Component {
     delBtn: {
         alignItems: 'center',
         margin: 30, 
-    }
+    },
+    quiztnDis: {
+        opacity: 0.5,
+        backgroundColor: 'gray',
+        width: 200,
+        padding: 30,
+        margin: 10,
+        borderWidth: 2,
+        alignItems: 'center',
+    },
   });

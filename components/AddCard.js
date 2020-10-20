@@ -13,7 +13,7 @@ class AddCard extends React.Component {
 
     handleChange = (e, field) => {
         this.setState({
-            [field]:e.target.value
+            [field]:e
         })
         
     }
@@ -47,22 +47,20 @@ class AddCard extends React.Component {
                 <Text style={styles.title}>Add your Card!</Text>
                 <TextInput 
                     style={styles.inputField} 
-                    multiline={true}
                     placeholder='Add the Question'
                     value={this.state.question}
-                    onChange={(e) => this.handleChange(e, 'question')}
+                    onChangeText={(e) => this.handleChange(e, 'question')}
                     
                 />
                 <TextInput 
                     style={styles.inputField} 
-                    multiline={true}
                     placeholder='Add the Answer'
                     value={this.state.answer}
-                    onChange={(e) => this.handleChange(e, 'answer')}
+                    onChangeText={(e) => this.handleChange(e, 'answer')}
                 />
                 <TouchableOpacity 
                     style={!btnDisabled ? styles.subBtn : styles.subBtnDis}
-                    disabled={btnDisabled ? true : false}
+                    disabled={btnDisabled}
                     onPress={() => this.handleSubmit()}
                 >
                     <Text style={styles.subBtnTxt}>Submit</Text>
