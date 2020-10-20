@@ -1,8 +1,36 @@
 import React from 'react'
 import { Text, View, TouchableOpacity, TextInput, StyleSheet} from 'react-native'
-import { strongCyan } from '../utils/colors'
+import { saveDeck } from '../utils/api'
+import { connect } from 'react-redux'
+import { addDeck } from '../actions'
 
-export default class NewDeck extends React.Component {
+class NewDeck extends React.Component {
+    state = {
+        value: ''
+    }
+    handleChange = (e) => {
+        this.setState({
+            value:e.target.value
+        })
+        
+    }
+
+    handleSubmit = () => {
+        const {value } = this.state
+        const deck = {[value]: {
+                        title: value,
+                        questions: []
+                    }}
+                    
+        saveDeck(deck, value)
+        this.props.dispatch(addDeck(deck,value))
+        
+        this.setState({
+            value: ''
+        })
+        this.props.navigation.goBack()
+    }
+
     render() {
         return(
             <View style={styles.container}>
@@ -10,14 +38,19 @@ export default class NewDeck extends React.Component {
                 <TextInput 
                     style={styles.inputField} 
                     multiline={true}
+                    value={this.state.value}
+                    onChange={(e) => this.handleChange(e)}
                 />
-                <TouchableOpacity style={styles.subBtn}>
+                <TouchableOpacity style={styles.subBtn} onPress={this.handleSubmit}>
                     <Text style={styles.subBtnTxt}>Submit</Text>
                 </TouchableOpacity>
             </View>
         )
     }
 }
+
+
+export default connect()(NewDeck)
 
 const styles = StyleSheet.create({
     container:  {        

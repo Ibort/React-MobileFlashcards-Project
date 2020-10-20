@@ -1,12 +1,21 @@
 import React from 'react'
 import { Text, View, StyleSheet, TouchableOpacity } from 'react-native'
 import { strongCyan } from '../utils/colors'
+import { removeDeck } from '../utils/api'
+import { connect } from 'react-redux'
+import { getDecks } from '../utils/api'
+import { receiveDecks } from '../actions'
 
-export default class DeckView extends React.Component {
+class DeckView extends React.Component {
     componentDidMount(){
-        const { navigation, route } = this.props
+        const { navigation, route, dispatch } = this.props
         navigation.setOptions({
             title:`${route.params.title} Deck`
+        })
+
+        navigation.addListener('focus', () => {   
+            getDecks()
+            .then(res => dispatch(receiveDecks(res)))
         })
     }
 
@@ -15,15 +24,27 @@ export default class DeckView extends React.Component {
     }
 
     addCard = () => {
-        this.props.navigation.navigate('AddCard')    
+        const { title } = this.props.route.params
+        this.props.navigation.navigate('AddCard', {title})    
+    }
+
+    delDeck = () => {
+        const { title } = this.props.route.params
+        removeDeck(title)
+        .then(() => {
+            this.props.navigation.goBack()
+        })
     }
 
     render() {
+        const { title } = this.props.route.params
+        const cardNum = this.props.decks[title].questions.length
+
         return (
                 <View style={styles.container}>
                     <View style={styles.deckTextCont}>
-                        <Text style={styles.title}>Deck</Text>
-                        <Text style={styles.subText}>X Cards</Text>
+                        <Text style={styles.title}>{title}</Text>
+                        <Text style={styles.subText}>{cardNum} Cards</Text>
                     </View>
                     <View>
                         <TouchableOpacity style={styles.addBtn} onPress={() => this.addCard()}>
@@ -32,7 +53,7 @@ export default class DeckView extends React.Component {
                         <TouchableOpacity style={styles.quizBtn} onPress={() => this.startQuiz()}>
                             <Text style={{color: 'white'}}>Start Quiz</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.delBtn}>
+                        <TouchableOpacity style={styles.delBtn} onPress={() => this.delDeck()}>
                             <Text style={{color: 'darkred'}}>Delete Deck</Text>
                         </TouchableOpacity>
                     </View>
@@ -40,6 +61,13 @@ export default class DeckView extends React.Component {
         )
     }
   }
+
+  function mapStateToProps (decks) { 
+    return decks
+  }
+
+
+  export default connect(mapStateToProps)(DeckView)
 
   const styles = StyleSheet.create({
     container: {

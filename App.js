@@ -1,4 +1,7 @@
 import React from 'react';
+import { createStore } from 'redux'
+import { Provider } from 'react-redux'
+import reducer from './reducers'
 import { StyleSheet, Text, View, StatusBar } from 'react-native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { NavigationContainer } from '@react-navigation/native'
@@ -12,55 +15,13 @@ import Quiz from './components/Quiz'
 import NewDeck from './components/NewDeck'
 import AddCard from './components/AddCard'
 
+
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
-
-function MyTabs() {
-  return (
-    <Tab.Navigator
-      tabBarOptions={{
-        activeBackgroundColor: strongCyan,
-        activeTintColor: 'white',
-        inactiveTintColor: strongCyan,
-        style: {
-          height: 80,
-        },
-        labelStyle: {fontSize: 15},
-      }}
-    >
-      <Tab.Screen 
-        name="Decks" 
-        component={DeckList} 
-        options={{ 
-          tabBarIcon: ({ color }) => <MaterialCommunityIcons name='cards-outline' size={50} color={color} />
-      }} />
-      <Tab.Screen 
-        name="New Decks" 
-        component={NewDeck} 
-        options={{
-          tabBarIcon: ({ color }) => <MaterialCommunityIcons name='plus-box-outline' size={50} color={color} />
-        }}  
-      />
-    </Tab.Navigator>
-  );
-}
-
-function SettingsScreen() {
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>New Deck</Text>
-    </View>
-  );
-}
-
-export default class App extends React.Component {
-
-  render() {
-    
-    return (  
-      <SafeAreaProvider>
-        <NavigationContainer>
+function MainNavigator() {
+  return(
+    <NavigationContainer>
           <StatusBar backgroundColor={strongCyan} barStyle='light-content' />  
           <Stack.Navigator>
             <Stack.Screen 
@@ -109,7 +70,48 @@ export default class App extends React.Component {
             />
           </Stack.Navigator> 
         </NavigationContainer>
-      </SafeAreaProvider>
+  )
+}
+
+function MyTabs() {
+  return (
+    <Tab.Navigator
+      tabBarOptions={{
+        activeBackgroundColor: strongCyan,
+        activeTintColor: 'white',
+        inactiveTintColor: strongCyan,
+        style: {
+          height: 80,
+        },
+        labelStyle: {fontSize: 15},
+      }}
+    >
+      <Tab.Screen 
+        name="Decks" 
+        component={DeckList} 
+        options={{ 
+          tabBarIcon: ({ color }) => <MaterialCommunityIcons name='cards-outline' size={50} color={color} />
+      }} />
+      <Tab.Screen 
+        name="New Decks" 
+        component={NewDeck} 
+        options={{
+          tabBarIcon: ({ color }) => <MaterialCommunityIcons name='plus-box-outline' size={50} color={color} />
+        }}  
+      />
+    </Tab.Navigator>
+  );
+}
+
+export default class App extends React.Component {
+  render() {
+    
+    return (  
+      <Provider store={createStore(reducer)}>
+        <SafeAreaProvider>
+          <MainNavigator />
+        </SafeAreaProvider>
+      </Provider>
     )
   }
 }

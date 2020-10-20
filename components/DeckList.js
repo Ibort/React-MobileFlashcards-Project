@@ -1,14 +1,17 @@
 import React from 'react'
 import { Text, View, StyleSheet, ScrollView, TouchableOpacity} from 'react-native'
 import { strongCyan } from '../utils/colors'
-
+import { getDecks } from '../utils/api'
+import { connect } from 'react-redux'
+import { receiveDecks } from '../actions'
 
 const data=['Lecso','Kolbász','Muzli','Lácso','Kőlbász','Mpzli', 'kenocs']
 
 function deckNavigate(props, title) {
-    props.navigation.navigate(
+   props.navigation.navigate(
         'DeckView',{
             title,
+            
         })
 }
 
@@ -23,17 +26,33 @@ function Deck({title, props}) {
     );
   }
 
-export default class DeckList extends React.Component {
+class DeckList extends React.Component {  
+    componentDidMount(){   
+        const { dispatch, navigation } = this.props
+
+        navigation.addListener('focus', () => {            
+            getDecks()
+            .then(res => dispatch(receiveDecks(res)))
+          });
+    }
+    
     render() {
+        const { decks } = this.props
         return (
                 <ScrollView>
-                        {data.map((deck) => {
+                        {Object.keys(decks).map((deck) => {
                             return <Deck key={deck} title={deck} props={this.props} />
                         })}
                 </ScrollView>
         )
     }
 }
+
+function mapStateToProps (decks) { 
+    return decks
+  }
+
+export default connect(mapStateToProps)(DeckList)
 
 
 const styles = StyleSheet.create({

@@ -1,12 +1,15 @@
 import React from 'react'
 import { Text, View, TouchableOpacity, TextInput, StyleSheet} from 'react-native'
+import { addCard } from '../actions'
+import { connect } from 'react-redux'
 
 
-export default class AddCard extends React.Component {
+class AddCard extends React.Component {
     state = {
         question: '',
         answer: '',
     }
+
 
     handleChange = (e, field) => {
         this.setState({
@@ -16,12 +19,22 @@ export default class AddCard extends React.Component {
     }
 
     handleSubmit = () => {
-        console.log('submt');
+        const { dispatch } = this.props
+        const { title } = this.props.route.params
+        const { question, answer } = this.state
+        const newCard = {
+            question,
+            answer
+        }
+
+
+        dispatch(addCard(newCard,title))
 
         this.setState({
             question: '',
             answer: ''
         })
+
         this.props.navigation.goBack()
     }
 
@@ -36,6 +49,7 @@ export default class AddCard extends React.Component {
                     style={styles.inputField} 
                     multiline={true}
                     placeholder='Add the Question'
+                    value={this.state.question}
                     onChange={(e) => this.handleChange(e, 'question')}
                     
                 />
@@ -43,6 +57,7 @@ export default class AddCard extends React.Component {
                     style={styles.inputField} 
                     multiline={true}
                     placeholder='Add the Answer'
+                    value={this.state.answer}
                     onChange={(e) => this.handleChange(e, 'answer')}
                 />
                 <TouchableOpacity 
@@ -56,6 +71,12 @@ export default class AddCard extends React.Component {
         )
     }
 }
+
+function mapStateToProps (decks) { 
+    return decks
+  }
+
+export default connect(mapStateToProps)(AddCard)
 
 const styles = StyleSheet.create({
     container:  {        
