@@ -38,8 +38,6 @@ class DeckView extends React.Component {
     }
 
     render() {
-        console.log(this.props);
-
         const { title } = this.props.route.params
         const cardNum = !this.props.decks[title] ? 0 : this.props.decks[title].questions.length
         const btnDisabled = cardNum === 0 ? true : false
