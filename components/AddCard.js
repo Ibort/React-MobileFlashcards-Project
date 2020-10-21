@@ -61,7 +61,7 @@ class AddCard extends React.Component {
                 <TouchableOpacity 
                     style={!btnDisabled ? styles.subBtn : styles.subBtnDis}
                     disabled={btnDisabled}
-                    onPress={() => this.handleSubmit()}
+                    onPress={this.handleSubmit}
                 >
                     <Text style={styles.subBtnTxt}>Submit</Text>
                 </TouchableOpacity>

@@ -47,6 +47,12 @@ export default class Quiz extends React.Component {
         })
     }
 
+    handleFinish = (chosen) => {
+        chosen !== 'reset'
+            ? this.props.navigation.goBack()
+            : this.setState({quizFinish: false, score: 0, questNum: 1})
+    }
+
     QuizTime = () =>{
         const { questNum, maxQuest, questions, answerShown  } = this.state
         const q = questions.length !== 0 ? questions[questNum-1][answerShown] : ''
@@ -85,7 +91,18 @@ export default class Quiz extends React.Component {
                     <Text style={styles.scoreTxt}>{scorePercent}%</Text>
                     <AntDesign style={{zIndex:1}} name="star" size={250} color="goldenrod" />                    
                 </View>
-                
+                <TouchableOpacity 
+                    style={styles.BQbuttons} 
+                    onPress={() => this.handleFinish('reset')}
+                >
+                    <Text style={styles.BQbuttonsTxt}>Reset Quiz</Text>
+                </TouchableOpacity>
+                <TouchableOpacity 
+                    style={styles.BQbuttons} 
+                    onPress={this.handleFinish}
+                >
+                    <Text style={styles.BQbuttonsTxt}>Back</Text>
+                </TouchableOpacity>
             </View>
         )
     }
@@ -162,4 +179,16 @@ const styles = StyleSheet.create({
         backgroundColor: 'crimson',
 
     },
+    BQbuttons: {
+        backgroundColor: 'black',
+        borderRadius: 20,   
+        padding: 20, 
+        width:200,
+        marginTop: 10,    
+    },
+    BQbuttonsTxt: {
+        alignSelf: 'center',
+        fontSize: 25,
+        color:'white'
+    }
   });
