@@ -70,11 +70,8 @@ class AddCard extends React.Component {
     }
 }
 
-function mapStateToProps (decks) { 
-    return decks
-  }
 
-export default connect(mapStateToProps)(AddCard)
+export default connect()(AddCard)
 
 const styles = StyleSheet.create({
     container:  {        
