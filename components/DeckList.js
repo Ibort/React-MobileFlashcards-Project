@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, View, StyleSheet, ScrollView, TouchableOpacity, Animated} from 'react-native'
+import { Text, StyleSheet, ScrollView, TouchableOpacity, Animated } from 'react-native'
 import { strongCyan } from '../utils/colors'
 import { getDecks } from '../utils/api'
 import { connect } from 'react-redux'

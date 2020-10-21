@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, View, StyleSheet, TouchableOpacity} from 'react-native'
+import { Text, View, StyleSheet, TouchableOpacity, Animated } from 'react-native'
 import { AntDesign } from '@expo/vector-icons'; 
 
 
@@ -10,11 +10,14 @@ export default class Quiz extends React.Component {
         answerShown: 'question',
         questions: [],
         score: 0,
-        quizFinish: false
+        quizFinish: false,
+        height: new Animated.Value(0)
     }
+
     componentDidMount() {
         const { deck } = this.props.route.params
         const questNum = deck.questions.length
+        
         this.setState({
             maxQuest: questNum,
             questions: deck.questions,             
@@ -22,7 +25,7 @@ export default class Quiz extends React.Component {
     }
 
     handleAnswer = (answ) => {
-        const { score, questNum, maxQuest } = this.state
+        const { score, questNum, maxQuest, height} = this.state
         const newScore = answ === 'correct' ? score+1 : score
 
         if( questNum === maxQuest) {
@@ -30,6 +33,11 @@ export default class Quiz extends React.Component {
                 score:newScore,
                 quizFinish: true
             })
+            Animated.spring(height, {
+                toValue: 1,
+                speed:6, 
+                useNativeDriver: true,
+            }).start()  
 
         } else {
             this.setState({
@@ -48,9 +56,14 @@ export default class Quiz extends React.Component {
     }
 
     handleFinish = (chosen) => {
-        chosen !== 'reset'
-            ? this.props.navigation.goBack()
-            : this.setState({quizFinish: false, score: 0, questNum: 1})
+        const { height } = this.state
+
+        if(chosen !== 'reset'){
+            this.props.navigation.goBack()
+        } else {
+            this.setState({quizFinish: false, score: 0, questNum: 1})
+            height.setValue(0)
+        }
     }
 
     QuizTime = () =>{
@@ -80,11 +93,11 @@ export default class Quiz extends React.Component {
     }
 
     ScoreTime = () => {
-        const {maxQuest, score} = this.state
+        const {maxQuest, score, height} = this.state
         const scorePercent = Math.round((score/maxQuest)*100)
 
         return(
-            <View style={styles.scoreContainer}>
+            <Animated.View style={[styles.scoreContainer, {transform: [{scaleY:height}]}]}>
                 <Text style={styles.qustTxt}>Your Score:</Text>
                 <Text style={styles.qustTxt}>{score}/{maxQuest} </Text>
                 <View style={styles.scoreFinal}>
@@ -103,7 +116,7 @@ export default class Quiz extends React.Component {
                 >
                     <Text style={styles.BQbuttonsTxt}>Back</Text>
                 </TouchableOpacity>
-            </View>
+            </Animated.View>
         )
     }
 
@@ -127,9 +140,10 @@ const styles = StyleSheet.create({
       justifyContent: 'space-between',
     },
     scoreContainer: {
-        flex: 1,
+        flex:1,
         alignItems: 'center',
         justifyContent: 'center',
+        overflow:'hidden',
       },
     scoreFinal:{
         alignItems: 'center',
