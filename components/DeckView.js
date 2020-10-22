@@ -5,6 +5,8 @@ import { removeDeck } from '../utils/api'
 import { connect } from 'react-redux'
 import { getDecks } from '../utils/api'
 import { receiveDecks } from '../actions'
+import { setLocalNotification, clearLocalNotification, notificationDate} from '../utils/notifications'
+import * as Notifications from 'expo-notifications'
 
 class DeckView extends React.Component {
     componentDidMount(){
@@ -20,6 +22,14 @@ class DeckView extends React.Component {
     }
 
     startQuiz = (title) => {
+        const date = new Date()
+        if(date > notificationDate){
+            clearLocalNotification()
+                .then(setLocalNotification)
+        } else {
+            clearLocalNotification()
+        }
+
         const deck = this.props.decks[title]
         this.props.navigation.navigate('Quiz', {
             deck

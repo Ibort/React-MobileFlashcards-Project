@@ -6,7 +6,7 @@ export function saveDeck (entry) {
     return AsyncStorage.mergeItem(MOBILE_FLASHCARDS_KEY,JSON.stringify(entry))
   }
 
-export function getDecks () {      
+export function getDecks () {    
     return AsyncStorage.getItem(MOBILE_FLASHCARDS_KEY)
     .then(res => {
         if( res === null) {

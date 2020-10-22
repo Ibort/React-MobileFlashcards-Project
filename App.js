@@ -2,7 +2,7 @@ import React from 'react';
 import { createStore } from 'redux'
 import { Provider } from 'react-redux'
 import reducer from './reducers'
-import { StyleSheet, Text, View, StatusBar } from 'react-native'
+import { StatusBar } from 'react-native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { NavigationContainer } from '@react-navigation/native'
 import DeckList from './components/DeckList'
@@ -14,6 +14,7 @@ import Deckview from './components/DeckView'
 import Quiz from './components/Quiz'
 import NewDeck from './components/NewDeck'
 import AddCard from './components/AddCard'
+import { setLocalNotification, clearLocalNotification } from './utils/notifications'
 
 
 const Tab = createBottomTabNavigator();
@@ -104,8 +105,12 @@ function MyTabs() {
 }
 
 export default class App extends React.Component {
-  render() {
-    
+  componentDidMount() {
+    setLocalNotification()
+    //clearLocalNotification()
+  }
+
+  render() {    
     return (  
       <Provider store={createStore(reducer)}>
         <SafeAreaProvider>
@@ -115,11 +120,3 @@ export default class App extends React.Component {
     )
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
