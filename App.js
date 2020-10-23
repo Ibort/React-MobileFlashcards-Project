@@ -14,7 +14,7 @@ import Deckview from './components/DeckView'
 import Quiz from './components/Quiz'
 import NewDeck from './components/NewDeck'
 import AddCard from './components/AddCard'
-import { setLocalNotification, clearLocalNotification } from './utils/notifications'
+import { setLocalNotification } from './utils/notifications'
 
 
 const Tab = createBottomTabNavigator();
@@ -107,7 +107,6 @@ function MyTabs() {
 export default class App extends React.Component {
   componentDidMount() {
     setLocalNotification()
-    //clearLocalNotification()
   }
 
   render() {    
